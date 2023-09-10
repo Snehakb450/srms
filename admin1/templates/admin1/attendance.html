@@ -1,0 +1,319 @@
+{% extends "admin1/admin_master.html" %} {% load static %} {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+  table,
+  th,
+  td {
+    border: 2px solid black;
+    border-style: double;
+  }
+
+  table {
+    width: 1200px;
+  }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;"> Attendance</h2><br><br>
+<div class="table-responsive">
+  
+  <form action="" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-6">
+        <select id="classid" name="classid" class="form-control" style="width: 200px;">
+          <option value="">Select class</option>
+          {% for cl in class_details %}
+          <option value="{{cl.id}}">{{cl.class_name}} {{cl.class_sem}}</option>
+          {% endfor %}
+
+
+        </select>
+      </div>
+      <div class="col-6">
+        <select id="month" name="month" class="form-control" style="width: 200px;">
+
+          <option value="">Select month</option>
+          {% for m in month %}
+          
+          <option value="{{m.id}}">{{m.month}}</option>
+          
+          {% endfor %}
+        </select>
+      </div>
+
+
+    </div>
+    <br><br>
+
+    <table id="student-table1">
+      <thead>
+
+        <tr>
+          <th>Roll no</th>
+          <th>Name</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+          <th>11</th>
+          <th>12</th>
+          <th>13</th>
+          <th>14</th>
+          <th>15</th>
+          <th>16</th>
+          <th>17</th>
+          <th>18</th>
+          <th>19</th>
+          <th>20</th>
+          <th>21</th>
+          <th>22</th>
+          <th>23</th>
+          <th>24</th>
+          <th>25</th>
+          <th>26</th>
+          <th>27</th>
+          <th>28</th>
+          <th>29</th>
+          <th>30</th>
+          <th>31</th>
+
+          <th>Save</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.student_roll }}</td>
+          <td>{{ s.student_name }}</td>
+          <td><input type="checkbox" name="day1" value="1" class="checkbox" id="day1_{{s.id}}"></td>
+          <td><input type="checkbox" name="day2" value="1" class="checkbox" id="day2_{{s.id}}"></td>
+          <td><input type="checkbox" name="day3" value="1" class="checkbox" id="day3_{{s.id}}"></td>
+          <td><input type="checkbox" name="day4" value="1" class="checkbox" id="day4_{{s.id}}"></td>
+          <td><input type="checkbox" name="day5" value="1" class="checkbox" id="day5_{{s.id}}"></td>
+          <td><input type="checkbox" name="day6" value="1" class="checkbox" id="day6_{{s.id}}"></td>
+          <td><input type="checkbox" name="day7" value="1" class="checkbox" id="day7_{{s.id}}"></td>
+          <td><input type="checkbox" name="day8" value="1" class="checkbox" id="day8_{{s.id}}"></td>
+          <td><input type="checkbox" name="day9" value="1" class="checkbox" id="day9_{{s.id}}"></td>
+          <td><input type="checkbox" name="day10" value="1" class="checkbox" id="day10_{{s.id}}"></td>
+          <td><input type="checkbox" name="day11" value="1" class="checkbox" id="day11_{{s.id}}"></td>
+          <td><input type="checkbox" name="day12" value="1" class="checkbox" id="day12_{{s.id}}"></td>
+          <td><input type="checkbox" name="day13" value="1" class="checkbox" id="day13_{{s.id}}"></td>
+          <td><input type="checkbox" name="day14" value="1" class="checkbox" id="day14_{{s.id}}"></td>
+          <td><input type="checkbox" name="day15" value="1" class="checkbox" id="day15_{{s.id}}"></td>
+          <td><input type="checkbox" name="day16" value="1" class="checkbox" id="day16_{{s.id}}"></td>
+          <td><input type="checkbox" name="day17" value="1" class="checkbox" id="day17_{{s.id}}"></td>
+          <td><input type="checkbox" name="day18" value="1" class="checkbox" id="day18_{{s.id}}"></td>
+          <td><input type="checkbox" name="day19" value="1" class="checkbox" id="day19_{{s.id}}"></td>
+          <td><input type="checkbox" name="day20" value="1" class="checkbox" id="day20_{{s.id}}"></td>
+          <td><input type="checkbox" name="day21" value="1" class="checkbox" id="day21_{{s.id}}"></td>
+          <td><input type="checkbox" name="day22" value="1" class="checkbox" id="day22_{{s.id}}"></td>
+          <td><input type="checkbox" name="day23" value="1" class="checkbox" id="day23_{{s.id}}"></td>
+          <td><input type="checkbox" name="day24" value="1" class="checkbox" id="day24_{{s.id}}"></td>
+          <td><input type="checkbox" name="day25" value="1" class="checkbox" id="day25_{{s.id}}"></td>
+          <td><input type="checkbox" name="day26" value="1" class="checkbox" id="day26_{{s.id}}"></td>
+          <td><input type="checkbox" name="day27" value="1" class="checkbox" id="day27_{{s.id}}"></td>
+          <td><input type="checkbox" name="day28" value="1" class="checkbox" id="day28_{{s.id}}"></td>
+          <td><input type="checkbox" name="day29" value="1" class="checkbox" id="day29_{{s.id}}"></td>
+          <td><input type="checkbox" name="day30" value="1" class="checkbox" id="day30_{{s.id}}"></td>
+          <td><input type="checkbox" name="day31" value="1" class="checkbox" id="day31_{{s.id}}"></td>
+
+          <td><button type="button" onclick="saveRowdata('{{ s.id }}')">Save</button></td>
+          
+
+
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+    <br><br>
+  </form>
+</div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var csrftoken = '{{ csrf_token }}';
+    function saveRowdata(studentId) {
+
+      var classid = $('#classid').val();
+      var month = $('#month').val();
+      var day1 = $('#day1_' + studentId).prop('checked') ? 1 : 0;
+      var day2 = $('#day2_' + studentId).prop('checked') ? 1 : 0;
+      var day3 = $('#day3_' + studentId).prop('checked') ? 1 : 0;
+      var day4 = $('#day4_' + studentId).prop('checked') ? 1 : 0;
+      var day5 = $('#day5_' + studentId).prop('checked') ? 1 : 0;
+      var day6 = $('#day6_' + studentId).prop('checked') ? 1 : 0;
+      var day7 = $('#day7_' + studentId).prop('checked') ? 1 : 0;
+      var day8 = $('#day8_' + studentId).prop('checked') ? 1 : 0;
+      var day9 = $('#day9_' + studentId).prop('checked') ? 1 : 0;
+      var day10 = $('#day10_' + studentId).prop('checked') ? 1 : 0;
+      var day11 = $('#day11_' + studentId).prop('checked') ? 1 : 0;
+      var day12 = $('#day12_' + studentId).prop('checked') ? 1 : 0;
+      var day13 = $('#day13_' + studentId).prop('checked') ? 1 : 0;
+      var day14 = $('#day14_' + studentId).prop('checked') ? 1 : 0;
+      var day15 = $('#day15_' + studentId).prop('checked') ? 1 : 0;
+      var day16 = $('#day16_' + studentId).prop('checked') ? 1 : 0;
+      var day17 = $('#day17_' + studentId).prop('checked') ? 1 : 0;
+      var day18 = $('#day18_' + studentId).prop('checked') ? 1 : 0;
+      var day19 = $('#day19_' + studentId).prop('checked') ? 1 : 0;
+      var day20 = $('#day20_' + studentId).prop('checked') ? 1 : 0;
+      var day21 = $('#day21_' + studentId).prop('checked') ? 1 : 0;
+      var day22 = $('#day22_' + studentId).prop('checked') ? 1 : 0;
+      var day23 = $('#day23_' + studentId).prop('checked') ? 1 : 0;
+      var day24 = $('#day24_' + studentId).prop('checked') ? 1 : 0;
+      var day25 = $('#day25_' + studentId).prop('checked') ? 1 : 0;
+      var day26 = $('#day26_' + studentId).prop('checked') ? 1 : 0;
+      var day27 = $('#day27_' + studentId).prop('checked') ? 1 : 0;
+      var day28 = $('#day28_' + studentId).prop('checked') ? 1 : 0;
+      var day29 = $('#day29_' + studentId).prop('checked') ? 1 : 0;
+      var day30 = $('#day30_' + studentId).prop('checked') ? 1 : 0;
+      var day31 = $('#day31_' + studentId).prop('checked') ? 1 : 0;
+
+
+
+      // Send the data to the server using AJAX
+      $.ajax({
+        url: '{% url "admin1:save_attendance" %}',
+        type: 'POST',
+        headers: {
+          'X-CSRFToken': csrftoken,
+        },
+        data: {
+          'classid': classid,
+          'studentId': studentId,
+          'month': month,
+          'day1': day1,
+          'day2': day2,
+          'day3': day3,
+          'day4': day4,
+          'day5': day5,
+          'day6': day6,
+          'day7': day7,
+          'day8': day8,
+          'day9': day9,
+          'day10': day10,
+          'day11': day11,
+          'day12': day12,
+          'day13': day13,
+          'day14': day14,
+          'day15': day15,
+          'day16': day16,
+          'day17': day17,
+          'day18': day18,
+          'day19': day19,
+          'day20': day20,
+          'day21': day21,
+          'day22': day22,
+          'day23': day23,
+          'day24': day24,
+          'day25': day25,
+          'day26': day26,
+          'day27': day27,
+          'day28': day28,
+          'day29': day29,
+          'day30': day30,
+          'day31': day31,
+
+          'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function (response) {
+          // Handle the success response, if needed
+          alert('Data saved successfully.');
+        },
+        error: function (xhr, status, error) {
+          // Handle errors if needed
+          alert('error');
+        }
+      });
+    }
+    $(document).ready(function () {
+      // Handle dropdown change event
+      $('#classid').on('change', function () {
+        var selectedClassId = $(this).val();
+        if (selectedClassId) {
+          fetchStudentsByClass(selectedClassId);
+        }
+      });
+
+      // Function to fetch student details based on selected class
+      function fetchStudentsByClass(classid) {
+        $.ajax({
+          url: '{% url "admin1:get_students_by_class" %}',
+          data: {
+            'classid': classid,
+          },
+
+          dataType: 'json',
+          success: function (data) {
+            // Clear the table body
+            $('#student-table1 tbody').empty();
+
+            // Populate the table with received data
+            $.each(data, function (index, student) {
+              var row = '<tr>' +
+                '<td>' + student.student_name + '</td>' +
+                '<td>' + student.student_roll + '</td>' +
+
+                '<td><input type="checkbox" class="checkbox" name="day1" id="day1_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day2" id="day2_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day3" id="day3_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day4" id="day4_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day5" id="day5_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day6" id="day6_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day7" id="day7_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day8" id="day8_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day9" id="day9_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day10" id="day10_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day11" id="day11_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day12" id="day12_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day13" id="day13_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day14" id="day14_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day15" id="day15_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day16" id="day16_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day17" id="day17_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day18" id="day18_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day19" id="day19_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day20" id="day20_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day21" id="day21_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day22" id="day22_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day23" id="day23_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day24" id="day24_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day25" id="day25_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day26" id="day26_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day27" id="day27_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day28" id="day28_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day29" id="day29_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day30" id="day30_' + student.id + '"></td>' +
+                '<td><input type="checkbox" class="checkbox" name="day31" id="day31_' + student.id + '"></td>' +
+
+                '<td><button type="button" onclick="saveRowdata(' + student.id + ')">Save</button></td>' +
+
+
+                '</tr>';
+              $('#student-table1 tbody').append(row);
+
+            });
+          },
+          error: function (xhr, status, error) {
+            // Handle errors if needed
+            console.error(error);
+          }
+        });
+      }
+
+    });
+
+  </script>
+
+  {% endblock %}

@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/css/master.css' %}">
+    <style>
+        body {
+            background-color: white;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .side {
+            color: #629e9e;
+            text-decoration: none;
+            font-size: larger;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        table {
+            width: 800px;
+            border: 2px double black;
+            border-collapse: collapse;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid" style="background-color: #629e9e;">
+                
+                <a class="navbar-brand" href="#" style="margin-left: 20px;">
+                    <img src="{% static '/images/srms.jpg' %}" alt="" style="height: 50px;width: 50px;">SRMS</a>
+                <a class="navbar-brand" href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a
+                    href=""></a><a href="">
+                    <a href=""></a><a href=""></a><a href=""></a><a href=""></a>
+                </a><a href=""></a>
+
+                <ul class="nav navbar-nav ml-auto">
+
+                    <li class="nav-item active">
+
+                        <div class="btn-group">
+                            <div class="dropdown">
+                                <span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false"> Administrator</span>
+                                <div class="dropdown-content">
+
+                                    <a href="{% url 'superadmin:change_password' %}" style="color: blue;"><button
+                                            class="dropdown-item" type="button">Change password?</button></a>
+                                    <a href="{% url 'superadmin:logout_superadmin' %}" style="color: blue;"><button
+                                            class="dropdown-item" type="button">Log out</button></a>
+
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </li>
+
+                </ul>
+
+            </div>
+        </nav>
+        <div>
+            <br>
+
+            <h3 style="margin-left: 5%;">Dashboard</h3>
+            <br>
+            <div class="table-responsive">
+                <table>
+                    <div class="content"
+                        style="border: 2px solid white;width: 1300px;float: right; overflow:auto; height: 900px;">
+                        <div class="container text-center style">
+                            <div class="row">
+                                <div class="col-md-4 col-6">
+                                    <div class="card"
+                                        style="width: 18rem;border-radius: 30px;background-color: rgb(93, 146, 177);">
+                                        <div class="card-body"><br><br>
+                                            <h5 class="card-title"><a href="{% url 'superadmin:add_admin' %}"
+                                                    class="card-link text">Add admin</a></h5><br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-6">
+                                    <div class="card"
+                                        style="width: 18rem;border-radius: 30px;background-color: rgb(85, 85, 117);">
+                                        <div class="card-body"><br><br>
+                                            <h5 class="card-title"><a href="{% url 'superadmin:class' %}"
+                                                    class="card-link text">
+                                                    Classes</a></h5><br>
+                                            <p>Total Classes: {{ total_classes }}</p>
+                                            <p>Total Students: {{ total_students }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br><br><br><br><br><br><br><br><br><br>
+
+                                <div class="col-md-4 col-6">
+                                    <div class="card"
+                                        style="width: 18rem;border-radius: 30px;background-color: rgb(124, 124, 69);">
+                                        <div class="card-body"><br><br>
+                                            <h5 class="card-title"><a href="{% url 'superadmin:notices' %}"
+                                                    class="card-link text">Notices</a></h5><br><br>
+                                            <p>Total Notices: {{ total_notices }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4 col-6">
+                                    <div class="card"
+                                        style="width: 18rem;border-radius: 30px;background-color: rgb(104, 147, 104);">
+                                        <div class="card-body"><br><br>
+                                            <h5 class="card-title"><a href="{% url 'superadmin:fees' %}"
+                                                    class="card-link text">Fee structure</a></h5><br><br>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </table>
+            </div>
+
+</body>
+
+</html>

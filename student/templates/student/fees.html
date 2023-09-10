@@ -1,0 +1,76 @@
+{% extends "student/student_master.html" %} {% load static %} {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+    table,
+    th,
+    td {
+        border: 2px solid black;
+        border-style: double;
+    }
+
+    table {
+        width: 1200px;
+    }
+</style>
+<br>
+<h2 style="margin-left: 30px;">Fee</h2><br><br>
+
+<br>
+
+<center>
+    <form action="" method="post">
+        <div class="table-responsive">
+        <table border="2" cellspacing="10px" cellpadding="20px">
+            <thead>
+                <tr>
+                    
+                    <th>Class</th>               
+                    <th>Tuition fee per year</th>
+                    <th>Year</th>
+                    <th>Special fee</th>
+                    <th>Caution deposit</th>
+                    <th>Sem1</th>
+                    <th>Sem2</th>
+                    <th>Sem3</th>
+                    <th>Sem4</th>
+                    <th>Sem5</th>
+                    <th>Sem6</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    
+                    <td rowspan="3">{{fee.class_name}}</td>           
+                    <td rowspan="3">{{fee.tuition_fee}}</td>
+                    <td>1</td>
+                    <td><a href="">{{fee.special1}}</a></td>
+                    <td rowspan="3">{{fee.deposit_fee}}</td>
+                    <td rowspan="3"><a href="">{{fee.sem1_fee}}</a></td>
+                    <td rowspan="3"><a href="">{{fee.sem2_fee}}</a></td>
+                    <td rowspan="3"><a href="">{{fee.sem3_fee}}</a></td>
+                    <td rowspan="3"><a href="">{{fee.sem4_fee}}</a></td>
+                    <td rowspan="3"><a href="">{{fee.sem5_fee}}</a></td>
+                    <td rowspan="3"><a href="">{{fee.sem6_fee}}</a></td> 
+                    
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><a href="">{{fee.special2}}</a></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><a href="">{{fee.special3}}</a></td>
+                </tr>
+                
+
+
+            </tbody>
+        </table><br><br><br><br></div>
+    </form>
+    <br><br>
+
+</center>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "admin1/admin_master.html" %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+    table,
+    th,
+    td {
+        border: 2px solid black; 
+        border-style: double;
+    }
+
+    table {
+        width: 1200px;
+    }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;">Results</h2><br><br>
+<div class="table-responsive">
+
+    <form action="" method="get">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+
+                <option id="classid" name="classid" class="form-control" style="width: 300px;" value="{{ cls.id }}">
+                    {{ cls.class_name }} {{ cls.class_sem }}</option>
+
+            </div>
+            <div class="col-6">
+                <select id="subjectid" name="subjectid" class="form-control" style="width: 300px;">
+                    <option value="">Select subject</option>
+                    {% for sub in subjects %}
+                    <option value="{{ sub.id }}">{{ sub.class_sub }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <br><br>
+        <table id="student-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Roll no</th>
+                    <th>Marks</th>
+                    <th>Total marks</th>
+                    <th>Grade</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for s in students %}
+                
+                <tr class="student-row" data-student-id="{{ s.id }}">
+                    <td class="id"></td>
+                    <td>{{ s.student_name }}</td>
+                    <td>{{ s.student_roll }}</td>
+                    <td class="result"></td>
+                    <td class="result"></td>
+                    <td class="result"></td>
+                   
+                    <td><a class="edit-link" href="">Edit</a></td>
+                    
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+
+           
+        </table>
+    </form><br><br><br><br>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Function to fetch mark details based on selected class and subject
+    function fetchMarkDetails(classId, subjectId, studentId) {
+        $.ajax({
+            url: '{% url "admin1:get_mark_details" %}',
+            data: {
+                'classid': classId,
+                'subjectid': subjectId,
+                'studentid': studentId,
+            },
+            dataType: 'json',
+            success: function (data) {
+                // Update the table cells with the fetched mark data
+                var $tableRow = $('.student-row[data-student-id="' + studentId + '"]');
+                $tableRow.find('td.result').each(function (index) {
+                    var resultField = 'result' + (index + 1);
+                    $(this).text(data[resultField]);
+                });
+                $tableRow.find('td.id').text(data.id);
+
+                        var editLink = $tableRow.find('a.edit-link');
+   
+    editUrl = 'edit_result/'+ data.id; // Add the attendance ID as a query parameter
+    editLink.attr('href', editUrl);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#subjectid').on('change', function () {
+            var selectedsubject = $(this).val();
+            var classId = '{{ cls.id }}'; 
+
+            // Check if valid subject is selected
+            if (!selectedsubject) {
+                alert('Please select a valid subject.');
+                return;
+            }
+
+            // Loop through each student row in the table
+            $('.student-row').each(function () {
+                var studentId = $(this).data('student-id');
+                var $tableRow = $(this);
+                // Check if valid student is selected
+                if (!studentId) {
+                    alert('Please select a valid student.');
+                    return;
+                }
+
+                fetchMarkDetails(classId, selectedsubject, studentId);
+            });
+        });
+
+        // Handle dropdown change event
+        $('#classid, #subjectid').on('change', function () {
+            var selectedClassId = $('#classid').val();
+            var selectedSubjectId = $('#subjectid').val();
+
+            if (selectedClassId && selectedSubjectId) {
+                var selectedStudentId = '{{ s.id }}'; // Get the student ID for each row
+                fetchMarkDetails(selectedClassId, selectedSubjectId, selectedStudentId);
+            }
+        });
+        
+    });
+</script>
+
+
+{% endblock %}
+
+

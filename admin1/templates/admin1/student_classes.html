@@ -1,0 +1,56 @@
+{% extends "admin1/admin_master.html" %} {% load static %} {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+  table,
+  th,
+  td {
+    border: 2px solid black;
+    border-style: double;
+  }
+
+  table {
+    width: 1200px;
+  }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;"> Student Classes</h2><br><br>
+<div class="table-responsive">
+  <center>
+    <table>
+      <tr>
+        <th>Class</th>
+
+        <th>Sem</th>
+        <th>Update</th>
+        <th>Delete</th>
+
+      </tr>
+
+      {% for cl in class_details %}
+      <tr>
+        <td>{{cl.class_name}}</td>
+
+        <td>{{cl.class_sem}}</td>
+        <td><a href="{% url 'admin1:update_class' cl.id %}">update</a></td>
+        <td><a href="{% url 'admin1:delete_class' cl.id %}">delete</a></td>
+
+      </tr>
+      {% endfor %}
+    </table>
+    <br><br>
+    <div class="row">
+      <button class="btn btn-lg" type="submit" style="background-color: #40a5a5; width: 400px;margin-left: 400px;">
+        <a href="{% url 'admin1:add_class' %}" style="color: white;text-decoration: none;">Create class</a></button>
+
+
+    </div>
+</div>
+</center>
+
+
+
+
+
+{% endblock %}

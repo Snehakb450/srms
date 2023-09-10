@@ -1,0 +1,256 @@
+{% extends "admin1/admin_master.html" %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+    table,
+    th,
+    td {
+        border: 2px solid black;
+        border-style: double;
+    }
+
+    table {
+        width: 1200px;
+    }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;"> Results</h2><br><br>
+<div class="table-responsive">
+    
+<div class="row">
+    <div class="col-4">
+        <select id="class" name="class" class="form-control" style="width: 300px;">
+            <option value="">Select class</option>
+            {% for cl in classes %}
+            <option value="{{ cl.class_name }}">{{ cl.class_name }} </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-4">
+        <select id="semester" name="semester" class="form-control" style="width: 300px;">
+            <option value="">Select semester</option>
+            {% for cl in class_details %}
+            <option value="{{ cl.id }}"> {{ cl.class_sem }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-4">
+        <select id="subjectid" name="subjectid" class="form-control" style="width: 300px;">
+            <option value="">Select subject</option>
+            {% for s in sub %}
+            <option value="{{ s.id }}">{{ s.class_sub }}</option> 
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<br><br> 
+
+<table id="student-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Roll no</th>
+            <th>Marks</th>
+            <th>Total marks</th>
+            <th>Grade</th>
+            <th>Grade point</th>
+            <th>Save</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ s.student_name }}</td>
+            <td name="roll">{{ s.student_roll }}</td>
+            <td><input type="text" class="marks" name="marks" id="marks_{{ s.id }}" required></td>
+            <td>100</td>
+            <td><input type="text" class="grade" name="grade" id="grade_{{ s.id }}" required></td>
+            <td><input type="number" class="gradepoint" name="gradepoint" id="gradepoint_{{ s.id }}" required></td>
+            <td><button type="button" onclick="saveRowData('{{ s.id }}')">Save</button></td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br><br><br><br>
+</div>
+<br><br>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script>
+    function saveRowData(studentId) {
+        var marks = $('#marks_' + studentId).val();
+        var grade = $('#grade_' + studentId).val();
+        var grade_point=$('#gradepoint_' + studentId).val();
+        var classid = $('#semester').val();
+        var classname=$('#class').val();
+        var subjectid = $('#subjectid').val();
+        
+        // Perform validation for each field
+        if (marks === "") {
+            alert('Please enter the marks.');
+            return;
+        }
+        if (grade === "") {
+            alert('Please enter the grade.');
+            return;
+        }
+        // Validate grade as a single character
+        if (grade.length !== 1 || !/[A-F]/i.test(grade)) {
+            alert('Please enter a valid grade (A-F).');
+            return;
+        }
+
+        
+        // Send the data to the server using AJAX
+        $.ajax({
+            url: '{% url "admin1:save_results" %}',
+            type: 'POST',
+            data: {
+                'studentId': studentId,
+                'marks': marks,
+                'grade': grade,
+                'grade_point':grade_point, 
+                'classid': classid,
+                'classname': classname,
+                'subjectid': subjectid,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (response) {
+                // Handle the success response, if needed
+                alert('Data saved successfully.');
+            },
+            error: function (xhr, status, error) {
+                // Handle errors if needed
+                console.error(error);
+            }
+        });
+
+    }
+    $('#class').on('change', function () {
+        var selectedClass = $(this).val();
+        if (selectedClass) {
+            fetchSemesterByClassName(selectedClass);
+        }
+    });
+    // Function to fetch semesters based on selected class name
+    function fetchSemesterByClassName(className) {
+        $.ajax({
+            url: '{% url "admin1:get_semester_by_class_name" %}',
+            data: {
+                'class_name': className,
+            },
+            dataType: 'json',
+            success: function (data) {
+                // Clear the semester dropdown options
+                $('#semester').empty();
+                // Add a default option
+                $('#semester').append('<option value="">Select semester</option>');
+                
+                // Populate the semester dropdown with received data
+                $.each(data, function (index, semester) {
+                    var option = '<option value="' + semester.id + '">' + semester.class_sem + '</option>';
+                    $('#semester').append(option);
+                });
+                
+            },
+            error: function (xhr, status, error) {
+                // Handle errors if needed
+                console.error(error);
+            }
+        });
+    }
+    
+
+    
+
+    $(document).ready(function () {
+        // Handle dropdown change event for semester
+        $('#semester').on('change', function () { 
+            var selectedSemesterId = $(this).val();
+            if (selectedSemesterId) {
+                fetchStudentsBySemester(selectedSemesterId);
+                 
+            }
+        });
+
+        // Function to fetch students based on selected semester
+        function fetchStudentsBySemester(semesterId) {
+            $.ajax({
+                url: '{% url "admin1:get_students_by_semester" %}',
+                data: {
+                    'semester': semesterId,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Clear the table body
+                    $('#student-table tbody').empty();
+
+                    // Populate the table with received data
+                    $.each(data, function (index, student) {
+                        var row = '<tr>' +
+                            '<td>' + student.student_name + '</td>' +
+                            '<td>' + student.student_roll + '</td>' +
+                            '<td><input type="text" class="marks" name="marks" id="marks_' + student.id + '"></td>' +
+                            '<td>100</td>' +
+                            '<td><input type="text" class="grade" name="grade" id="grade_' + student.id + '"></td>' +
+                            '<td><input type="number" class="gradepoint" name="gradepoint" id="gradepoint_' + student.id + '"></td>' +
+                            '<td><button type="button" onclick="saveRowData(' + student.id + ')">Save</button></td>' +
+                            '</tr>';
+                        $('#student-table tbody').append(row);
+                    });
+                    fetchSubjectsBySemester(semesterId); 
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors if needed
+                    console.error(error);
+                }
+            });
+        }
+    
+       
+        // Function to fetch subjects based on selected semester
+        function fetchSubjectsBySemester(semesterId) {
+            $.ajax({
+                url: '{% url "admin1:get_subjects_by_semester" %}',
+                data: {
+                    'semester_id': semesterId,
+                },
+                dataType: 'json',
+                success: function (data) {
+                     
+                    // Clear the subjects dropdown options
+                    $('#subjectid').empty();
+                    // Add a default option
+                    $('#subjectid').append('<option value="">Select subject</option>');
+    
+                    // Populate the subjects dropdown with received data
+                    $.each(data, function (index, subject) {
+                        var option = '<option value="' + subject.id + '">' + subject.class_sub + '</option>';
+                        $('#subjectid').append(option);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors if needed
+                    console.error(error);
+                }
+            });
+        }
+    });
+        
+    
+    
+    
+     
+    
+    
+</script>
+
+
+{% endblock %}
+
+

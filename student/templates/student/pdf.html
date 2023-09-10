@@ -1,0 +1,170 @@
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+<br>
+<div class="table-responsive">
+<div class="container">
+    <center><h2>Collage name</h2>
+    <h3>Examination Results</h3></center><hr>
+    <center><h4>UG Degree Examination 2023</h4></center>
+    <br>
+    <p>Semester: {{class_details.class_sem}} </p>
+    <p>programme: {{data.student_class}} </p>
+    <p>Name: {{data.student_name}}</p>
+    <p>Reg no: {{data.student_roll}} </p>
+
+    
+
+    <br>
+    <center>
+        <table id="results-table" border="2" cellspacing="10px" cellpadding="20px" style="width: 1300px;">
+            <thead>
+                <tr>
+                    <th>Subject id</th>
+                    <th>Subject</th> 
+                    <th>Credits(C)</th>            
+                    <th>Marks</th>
+                    <th>Max marks</th>
+                    <th>Grade</th>
+                    <th>Grade point(G)</th>
+                    <th>Credit point(C*G)</th>                
+                    <th>Status</th> 
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in result_data %}
+                <tr>
+                    <td>{{ subject.subject_id }} </td>
+                    <td>{{ subject.subject_name }}</td>
+                    <td>{{ subject.credits }}</td>
+                    <td>{{ subject.marks }}</td>
+                    <td>{{subject.total_marks}}</td>    
+                    <td>{{ subject.grade }}</td>
+                    <td>{{ subject.grade_point }}</td>
+                    <td>{{ subject.credit_point }}</td>
+                    <td>{{ subject.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <p>Total credit points : <span id="total-credit-points"></span></p>
+            </div>
+            <div class="col-3">SGPA: <span id="sgpa"></span> </div>
+            <div class="col-2">Grade: <span id="sgpa-grade"></span></div>
+        </div>
+        <hr>
+    </div>
+
+ <center>
+        <a href="{% url 'student:pdf' data.student_sem  %}" class="btn btn-lg" style="background-color: #40a5a5; width: 200px;" download>
+            Download PDF
+        </a>
+        <br><br>
+    </center> 
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add these script tags to your HTML template -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+
+<script>
+   
+    $(document).ready(function () {
+        var studentId = '{{ id }}';
+        var classid = '{{ classid }}';
+        $.ajax({
+            type: 'GET',
+            url: '{% url "student:fetch_subjects_and_results" %}',
+            data: {
+                'student_id': studentId,
+                'semester': classid,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('AJAX Response:', data);
+                var totalCreditPoints = 0; 
+                var totalCredits = 0;
+                var maxSGPAScale = 6;
+
+                $('#results-table tbody').empty();
+
+                $.each(data.subjects, function (index, subject) {
+                    var newRow = $('<tr>');
+                    newRow.append('<td>' + subject.subject_id + '</td>');
+                    newRow.append('<td>' + subject.subject_name + '</td>');
+                    newRow.append('<td>' + subject.credits + '</td>');
+
+                    if (index < data.results.length) {
+                        newRow.append('<td>' + data.results[index].marks + '</td>');
+                        newRow.append('<td>' + data.results[index].total_marks + '</td>');
+                        newRow.append('<td>' + data.results[index].grade + '</td>');                       
+                        newRow.append('<td>' + data.results[index].grade_point + '</td>');
+                        var creditPoint = subject.credits * data.results[index].grade_point;
+                        newRow.append('<td>' + creditPoint + '</td>');
+                        var status = '';
+                        if (data.results[index].grade === 'A' || data.results[index].grade === 'B' || data.results[index].grade === 'C') {
+                            status = 'P';
+                        } else {
+                        status = 'F';
+                        }
+                        newRow.append('<td>' + status + '</td>');
+                        totalCreditPoints += creditPoint;
+                        totalCredits += subject.credits;
+
+                        
+                    } else {
+                        newRow.append('<td></td>');
+                        newRow.append('<td></td>');
+                        newRow.append('<td></td>');
+                        newRow.append('<td></td>');
+                        newRow.append('<td></td>');
+                        newRow.append('<td></td>');
+                    }
+
+                    $('#results-table tbody').append(newRow);
+                });
+                var sgpa = totalCreditPoints / totalCredits;
+            $('#total-credit-points').text(totalCreditPoints);
+            $('#sgpa').text(sgpa.toFixed(2)); 
+            // Convert SGPA to Percentage
+    var percentage = (sgpa / maxSGPAScale) * 100;
+    $('#sgpa-percentage').text(percentage.toFixed(2) + '%');
+
+    // Determine Grade based on Percentage Range
+    var grade;
+    if (percentage >= 80) {
+        grade = 'A';
+    } else if (percentage >= 70) {
+        grade = 'B';
+    } else if (percentage >= 60) {
+        grade = 'C';
+    } else if (percentage >= 50) {
+        grade = 'D';
+    } else {
+        grade = 'F';
+    }
+    $('#sgpa-grade').text(grade);
+                
+            },
+            error: function (error) {
+                console.log('AJAX Error:', error);
+            }
+        });
+        
+    });
+    
+    
+</script>
+
+
+{% endblock %}
+
+

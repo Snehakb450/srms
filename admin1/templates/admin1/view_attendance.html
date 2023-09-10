@@ -1,0 +1,237 @@
+{% extends "admin1/admin_master.html" %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<style>
+    table,
+    th,
+    td {
+        border: 2px solid black;
+        border-style: double;
+    }
+
+    table {
+        width: 1200px;
+    }
+
+
+    /* Original styles */
+
+    /* Add this media query for smaller screens */
+    @media (max-width: 767px) {
+        table {
+            width: 100%;
+            /* Make the table full width on smaller screens */
+        }
+    }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;">Attendance</h2><br><br>
+<div class="table-responsive">
+    <form action="" method="get">
+        {% csrf_token %}
+        <div class="row" style="margin-left: 60px;">
+            <div class="col-4">
+                <option value="{{ cls.id }}" name="classid">{{ cls.class_name }} {{ cls.class_sem }}</option>
+            </div>
+            
+            <div class="col-4">
+                <select id="month" name="month" class="form-control" style="width: 250px;">
+                    
+                    {% for m in month %}
+                        <option value="{{ m.id }}">{{m.id }}. {{ m.month }}</option>
+                    {% endfor %}
+                </select>                
+            </div>
+            
+            <div class="col-4">
+                <label for="total">Total working days:</label>
+                <input type="number" name="total" id="total" value="{{total.total}}">
+            </div>
+        </div>
+        <br><br>
+        <table id="attendance-table" class="student-table1"> 
+            <thead> 
+                <tr>
+                    <th></th>
+                    <th>Student id </th>
+                    <th>Name</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                    <th>9</th>
+                    <th>10</th>
+                    <th>11</th>
+                    <th>12</th>
+                    <th>13</th>
+                    <th>14</th>
+                    <th>15</th>
+                    <th>16</th>
+                    <th>17</th>
+                    <th>18</th>
+                    <th>19</th>
+                    <th>20</th>
+                    <th>21</th>
+                    <th>22</th>
+                    <th>23</th>
+                    <th>24</th>
+                    <th>25</th>
+                    <th>26</th>
+                    <th>27</th>
+                    <th>28</th>
+                    <th>29</th>
+                    <th>30</th>
+                    <th>31</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                    <th>Edit</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in students %}
+                
+                <tr class="student-row" data-student-id="{{ s.id }}" data-attendance-id="{{ s.attendance.id }}">
+                    <td class="id">{{s.attendance.id}}</td>
+                    <td>{{s.id}}</td>
+                   
+                    <td>{{ s.student_name }}</td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td> 
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="day"></td>
+                    <td class="present"></td>
+                    <td class="absent"></td>
+
+                    <td>
+                        <a class="edit-link" href="">Edit</a>
+                    </td>
+                    
+                    
+                    
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+
+        </table>
+    </form><br><br><br><br><br>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#month').on('change', function () {
+            var selectedMonth = $(this).val();
+            var classId = '{{ cls.id }}'; // Replace with the actual class ID
+
+            // Loop through each student row in the table
+            $('.student-row').each(function () {
+                var studentId = $(this).data('student-id');
+                var $tableRow = $(this);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "admin1:fetch_attendance" %}',
+                    data: {
+                        'student_id': studentId,
+                        'class_id': classId,
+                        'month': selectedMonth,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        // Update the table cells with the fetched attendance data
+                        $tableRow.find('td.day').each(function (index) {
+                            var dayField = 'day' + (index + 1);
+                            $(this).text(data[dayField]);
+                        });
+                        
+                        $tableRow.find('td.id').text(data.id);
+
+                        var editLink = $tableRow.find('a.edit-link');
+   
+    editUrl = 'edit_attendance/'+ data.id; // Add the attendance ID as a query parameter
+    editLink.attr('href', editUrl);
+
+
+                        var totalWorkingDays = parseInt($('#total').val());
+                        var presentDays = 0;
+                        $tableRow.find('td.day').each(function () {
+                            var dayValue = parseInt($(this).text());
+                            if (!isNaN(dayValue) && dayValue > 0) {
+                                presentDays++;
+                            }
+                        });
+
+                        var absentDays = totalWorkingDays - presentDays;
+
+                        // Update the Present and Absent cells
+                        $tableRow.find('.present').text(presentDays);
+                        $tableRow.find('.absent').text(absentDays);
+                       
+                    },
+
+
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+            $.ajax({
+                type: 'GET',
+                url: '{% url "admin1:fetch_total" %}',
+                data: {
+                    'month': selectedMonth,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Update the total input field with the fetched total value
+                    $('#total').val(data.total_working_days);
+                    $('#months').val(data.month_id);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    
+</script>
+
+
+{% endblock %}
+

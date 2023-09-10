@@ -1,0 +1,95 @@
+{% extends "admin1/admin_master.html" %} {% load static %} {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<style>
+    table,
+    th,
+    td {
+        border: 2px solid black;
+        border-style: double;
+    }
+
+    table {
+        width: 1200px;
+    }
+
+    body {
+        color: black;
+        background-color: white;
+
+    }
+    .notice {
+        border: 2px solid white;
+        margin-left: 23%;
+        margin-right: 30%;
+        margin-bottom: 10%;
+        padding: 20px;
+        width: 800px;
+    }
+
+    .manage_student {
+        border: 2px solid grey;
+        margin-left: 25%;
+        margin-right: 30%;
+        margin-top: 9%;
+        margin-bottom: 10%;
+        padding: 20px;
+        width: 700px;
+    }
+</style>
+
+<br>
+<h2 style="margin-left: 30px;">Notices</h2><br><br>
+<div class="table-responsive">
+   
+<table style="width: 150px;margin-left: 40px;">
+    {% for cl in class_details %}
+    <tr>
+        <td><label for="">Class:</label></td>
+        <td>{{cl.class_name}}</td>
+    </tr>
+    <tr>
+        <td><label for="">Section:</label></td>
+        <td>{{cl.class_section}}</td>
+    </tr>
+    <tr>
+        <td><label for="">Sem:</label></td>
+        <td>{{cl.class_sem}}</td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+<br><br>
+
+        <div class="notice" id="notice">
+
+            <form method="post">
+                {% csrf_token %}
+                
+                
+                <div class="row mb-3">
+                    
+                    <div class="col-sm-10">
+                        <textarea name="inputnotice" id="inputnotice" cols="30" rows="10" style="width: 550px;" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 8%;">Upload</button>
+                </div>
+
+                
+            </form>
+        </div>
+</div>
+    </body>
+
+    </html>
+
+
+
+
+
+
+{% endblock %}

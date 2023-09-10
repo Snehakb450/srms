@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static '/css/master.css' %}">
+    <style>
+        body {
+            background-color: white;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .side {
+            color: #629e9e;
+            text-decoration: none;
+            font-size: larger;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        table.th,td {
+            width: 800px;
+            border: 2px double grey;
+            border-collapse: collapse;
+        }
+        a{
+            color:black;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+   <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid" style="background-color: #629e9e;">
+            
+            <a class="navbar-brand" href="#" style="margin-left: 20px;">
+                <img src="{% static '/images/srms.jpg' %}" alt="" style="height: 50px;width: 50px;">SRMS</a>
+            <a class="navbar-brand" href=""></a><a href=""></a><a href=""></a><a href=""></a><a href=""></a><a
+                href=""></a><a href="">
+                <a href=""></a><a href=""></a><a href=""></a><a href="{% url 'superadmin:dash' %}">Dashboard</a>
+            </a><a href=""></a>
+
+            <ul class="nav navbar-nav ml-auto">
+
+                <li class="nav-item active">
+
+                    <div class="btn-group">
+                        <div class="dropdown">
+                            <span type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"> Administrator</span>
+                            <div class="dropdown-content">
+
+                                <a href="{% url 'superadmin:change_password' %}"><button class="dropdown-item"
+                                        type="button">Change password?</button></a>
+                                <a href="{% url 'superadmin:logout_superadmin' %}"><button class="dropdown-item"
+                                        type="button">Log out</button></a>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+    <div>
+        <br> 
+
+        <h3 style="margin-left: 5%;">Fees</h3>
+        <br>
+        <center>
+            <div class="table-responsive">
+            <table border="2" cellspacing="10px" cellpadding="10px" style="width: 1000px;">
+              <thead>
+                  <tr>
+                      
+                      <th>Class</th>
+                     
+                      <th>Tuition fee per year</th>
+                      <th>Year</th>
+                      <th>Special fee</th>
+                      <th>Caution deposit</th>
+                      <th>Sem1</th>
+                      <th>Sem2</th>
+                      <th>Sem3</th>
+                      <th>Sem4</th>
+                      <th>Sem5</th>
+                      <th>Sem6</th>
+                      
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for fee in fees %}
+                  <tr>
+                      <td rowspan="3">{{fee.class_name}}</td>
+                      
+                      <td rowspan="3">{{fee.tuition_fee}}</td>
+                      <td>1</td>
+                      <td>{{fee.special1}}</td>
+                      <td rowspan="3">{{fee.deposit_fee}}</td>
+                      <td rowspan="3">{{fee.sem1_fee}}</td>
+                      <td rowspan="3">{{fee.sem2_fee}}</td>
+                      <td rowspan="3">{{fee.sem3_fee}}</td>
+                      <td rowspan="3">{{fee.sem4_fee}}</td>
+                      <td rowspan="3">{{fee.sem5_fee}}</td>
+                      <td rowspan="3">{{fee.sem6_fee}}</td>
+                     
+                  </tr>
+                  <tr>
+                      <td>2</td>
+                      <td>{{fee.special2}}</td>
+                  </tr>
+                  <tr>
+                      <td>3</td>
+                      <td>{{fee.special3}}</td>
+                  </tr>
+                  {% endfor %}
+                  
+          
+              </tbody>
+          </table><br><br><br><br><br>
+            </div>
+        </center>
+ 
+    
+        
+</body> 
+
+</html> 
+
